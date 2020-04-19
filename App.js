@@ -1,57 +1,39 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView, FlatList } from 'react-native';
+
+import GoalInput from './components/GoalInput.js';
+import GoalItem from './components/GoalItem.js';
 
 const App = () => {
-  const [ newGoal, setNewGoal ] = useState('');
   const [ goalList, setGoalList ] = useState([]);
 
-  const handleInputChange = (text) => setNewGoal(text);
-
-  const handleAddGoal = () => {
-    setGoalList(currentState => [...currentState, newGoal]);
-    setNewGoal('');
+  const handleAddGoal = (newGoal) => {
+    setGoalList(currentState => [ ...currentState, {id: Math.random().toString(), value: newGoal} ]);
   };
+
+  const handleDeleteGoal = (id) => {
+    const newGoalList = goalList.filter(current => current.id !== id);
+
+    setGoalList(newGoalList);
+  }
 
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Course Goal" style={styles.input} onChangeText={handleInputChange} value={newGoal}/>
-        <Button title="ADD" onPress={handleAddGoal}/>
-      </View>
+      <GoalInput handleAddGoal={handleAddGoal}/>
 
-      <View style={styles.listContainer}>
-        {goalList.map( (current, index) => <View  key={`${index}-${current}`} style={styles.listItem}><Text>{index+1}.{current}</Text></View> )}
-      </View>
+      <FlatList style={styles.listContainer} data={goalList} renderItem={itemData => <GoalItem goal={itemData.item} handleDeleteGoal={handleDeleteGoal}/>}/>
     </View>
   );
 };
-
-export default App;
-
 const styles = StyleSheet.create({
   screen: {
     padding: 50
   },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: "space-between",
-    alignItems: 'center'
-  },
-  input: {
-    width: '80%',
-    borderColor: 'black',
-    padding: 10,
-    borderWidth: 1
-  },
   listContainer: {
     marginTop: 20
   },
-  listItem: {
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: '#ccc',
-    borderColor: 'black',
-    borderWidth: 1
-  }
-  
 });
+
+export default App;
+
+
