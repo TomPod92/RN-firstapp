@@ -7,6 +7,10 @@ const GoalInput = (props) => {
     const handleInputChange = (text) => setNewGoal(text);
 
     const handleButtonPress = () => {
+        if(!newGoal.trim()) {
+            return
+        }
+        
         props.handleAddGoal(newGoal);
         props.closeModal(false);
         setNewGoal('');

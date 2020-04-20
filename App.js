@@ -11,7 +11,7 @@ const App = () => {
   const handleAddGoal = (newGoal) => {
     setGoalList(currentState => [ ...currentState, {id: Math.random().toString(), value: newGoal} ]);
   };
-
+  
   const handleDeleteGoal = (id) => {
     const newGoalList = goalList.filter(current => current.id !== id);
 
